@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공무원 초과근무 수당 계산기</title>
+    <style>
+        /* CSS 스타일링 */
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f7f6;
+            margin: 0;
+        }
+        .calculator {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+        .result h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 10px;
+        }
+        .result p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .result span {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .notice {
+            font-size: 12px;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <h1>지방직 공무원 초과근무 수당 계산기</h1>
+        <div class="input-group">
+            <label for="grade">직급 선택</label>
+            <select id="grade">
+                <option value="9">9급</option>
+                <option value="8">8급</option>
+                <option value="7">7급</option>
+                <option value="6">6급</option>
+                <option value="5">5급</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="overtime">시간외근무 (시간)</label>
+            <input type="number" id="overtime" value="0" min="0">
+        </div>
+        <button onclick="calculate()">계산하기</button>
+        <div class="result" id="result-box" style="display: none;">
+            <h2>예상 초과근무 수당</h2>
+            <p>시간외근무 수당: <span id="overtime-pay">0</span>원</p>
+            <hr>
+            <p>총 합계: <span id="total-pay">0</span>원</p>
+        </div>
+        <p class="notice">
+            ※ 본 계산기는 2026년 공무원 보수 규정을 참고하여 제작되었으며, 실제 지급액과 차이가 있을 수 있습니다.
+            정확한 금액은 소속 기관의 급여 담당자에게 문의하시기 바랍니다.
+        </p>
+    </div>
+
+    <script>
+        // JavaScript 계산 로직
+        function calculate() {
+            // 2026년 직급별 시간외근무수당 단가
+            const payRates = {
+                '5': 16053,
+                '6': 13692,
+                '7': 12368,
+                '8': 12113,
+                '9': 10949
+            };
+
+            const grade = document.getElementById('grade').value;
+            const overtimeHours = parseFloat(document.getElementById('overtime').value) || 0;
+
+            const rate = payRates[grade];
+
+            // 수당 계산
+            // 시간외근무수당: 1일 4시간, 월 57시간 한도 (기관별 상이)
+            // 여기서는 입력된 시간을 그대로 계산합니다.
+            const totalPay = Math.floor(overtimeHours * rate);
+
+            // 결과 표시
+            document.getElementById('overtime-pay').innerText = totalPay.toLocaleString();
+            document.getElementById('total-pay').innerText = totalPay.toLocaleString();
+
+            document.getElementById('result-box').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
